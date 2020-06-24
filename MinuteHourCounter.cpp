@@ -2,7 +2,7 @@ class MinuteHourCounter
 {
 public:
     // カウントを追加する
-    void Count(int num_bytes);
+    void Add(int count);
 
     // 直近1分間のカウントを返す
     int MinuteCount();
