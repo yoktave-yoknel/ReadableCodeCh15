@@ -1,12 +1,16 @@
+// 直近1分間および直近1時間の累積カウントを記録する。
+// 例えば、帯域幅の使用状況を確認するのに使える。
 class MinuteHourCounter
 {
 public:
-    // カウントを追加する
-    void Count(int num_bytes);
+    // 新しいデータ点を追加する (count >= 0)。
+    // それから1分間は、MinuteCount()の返す値が+count分だけ増える。
+    // それから1時間は、HourCount()の返す値が+count分だけ増える。
+    void Add(int count);
 
-    // 直近1分間のカウントを返す
+    // 直近60秒間の累積カウントを返す。
     int MinuteCount();
 
-    // 直近1時間のカウントを返す
+    // 直近60分の累積カウントを返す。
     int HourCount();
 }
