@@ -30,15 +30,15 @@ public:
     // それから1時間は、HourCount()の返す値が+count分だけ増える。
     void Add(int count) {
         events.push_back(Event(count, time()));
-    };
+    }
 
     // 直近60秒間の累積カウントを返す。
     int MinuteCount() {
         return CountSince(time() - 60);
-    };
+    }
 
     // 直近3600秒間の累積カウントを返す。
     int HourCount() {
         return CountSince(time() - 3600);
-    };
-}
+    }
+};
