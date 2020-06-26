@@ -10,6 +10,19 @@ class MinuteHourCounter
     };
 
     list<Event> events;
+
+    int CountSince(time_t cutoff) {
+        int count = 0;
+        for (list<Event>::reverse_iterator rit = events.rbegin();
+             rit != events.rend(); ++rit) {
+            if (rit->time <= cutoff) {
+                break;
+            }
+            count += rit->count;
+
+        }
+        return count;
+    }   
     
 public:
     // 新しいデータ点を追加する (count >= 0)。
@@ -17,29 +30,15 @@ public:
     // それから1時間は、HourCount()の返す値が+count分だけ増える。
     void Add(int count) {
         events.push_back(Event(count, time()));
-    };
+    }
 
     // 直近60秒間の累積カウントを返す。
     int MinuteCount() {
-        int count = 0;
-        const time_t now_secs = time();
-        for (list<Event>::reverse_iterator i = events.rbegin();
-             i != events.rend() && i->time > now_secs - 60; i++) {
-            count += i->count;
-        }
-        return count;
-
-    };
+        return CountSince(time() - 60);
+    }
 
     // 直近3600秒間の累積カウントを返す。
     int HourCount() {
-        int count = 0;
-        const time_t now_secs = time();
-        for (list<Event>::reverse_iterator i = events.rbegin();
-             i != events.rend() && i->time > now_secs - 3600; i++) {
-            count += i->count;
-        }
-        return count;
-
-    };
-}
+        return CountSince(time() - 3600);
+    }
+};
