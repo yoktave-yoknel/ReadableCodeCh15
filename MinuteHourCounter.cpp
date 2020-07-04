@@ -1,17 +1,49 @@
 // 最大数を持ったキュー。古いデータは端から「落ちる」。
 class ConveyorQueue {
-    ConveyorQueue(int max_items);
+    queue<int> q;
+    int max_items;
+    int total_sum; // qに含まれるすべての項目の合計
 
-    // キューの最後の値を増加する。
-    void AddToBack(int count);
+    public:
+        ConveyorQueue(int max_items) : max_items(max_items), total_sum(0) {
+        }
 
-    // キューの値を'num_shifted'の分だけシフトする。
-    // 新しい項目は0で初期化する。
-    // 最古の項目はmax_items以下なら削除する。
-    void Shift(int num_shifted);
+        // キューの値を'num_shifted'の分だけシフトする。
+        // 新しい項目は0で初期化する。
+        // 最古の項目はmax_items以下なら削除する。
+        void Shift(int num_shifted) {
+            // 項目がシフトされすぎた場合に、キューをクリアする。
+            if (num_shifted >= max_items) {
+                q = queue<int>(); // キューをクリア
+                total_sum = 0;
+                return;
+            }
 
-    // 現在のキューに含まれる項目の合計数を返す。
-    int TotalSum();
+            // 必要な分だけ0をプッシュする。
+            while (num_shifted > 0) {
+                q.push(0);
+                num_shifted--;
+            }
+
+            // 超過した項目はすべて落とす。
+            while (q.size() > max_items) {
+                total_sum -= q.front();
+                q.pop();
+            }
+        }
+
+        // キューの最後の値を増加する。
+        void AddToBack(int count) {
+            if (q.empty()) Shift(1); // qが少なくとも1つの項目を持つようにする。
+            q.back() += count;
+
+            total_sum += count;
+        }
+
+        // 現在のキューに含まれる項目の合計数を返す。
+        int TotalSum() {
+            return total_sum;
+        }
 };
 
 // 時間バケツN個のカウントを保持するクラス。
